@@ -1,0 +1,30 @@
+[
+  {
+    "id": "zh-wikisource-main",
+    "subject": "chinese",
+    "kind": "mediawiki-api",
+    "url": "https://zh.wikisource.org/w/api.php?action=query&generator=recentchanges&grclimit=20&prop=info&format=json&origin=*",
+    "license": "CC BY-SA"
+  },
+  {
+    "id": "zh-wiktionary-recent",
+    "subject": "chinese",
+    "kind": "mediawiki-api",
+    "url": "https://zh.wiktionary.org/w/api.php?action=query&list=recentchanges&rclimit=20&format=json&origin=*",
+    "license": "CC BY-SA"
+  },
+  {
+    "id": "en-wiktionary-recent",
+    "subject": "english",
+    "kind": "mediawiki-api",
+    "url": "https://en.wiktionary.org/w/api.php?action=query&list=recentchanges&rclimit=20&format=json&origin=*",
+    "license": "CC BY-SA"
+  },
+  {
+    "id": "gutenberg-feed",
+    "subject": "english",
+    "kind": "atom",
+    "url": "https://www.gutenberg.org/cache/epub/feeds/today.rss",
+    "license": "Public domain metadata"
+  }
+]
