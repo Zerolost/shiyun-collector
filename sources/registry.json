@@ -3,21 +3,21 @@
     "id": "zh-wikisource-main",
     "subject": "chinese",
     "kind": "mediawiki-api",
-    "url": "https://zh.wikisource.org/w/api.php?action=query&generator=recentchanges&grclimit=20&prop=info&format=json&origin=*",
+    "url": "https://zh.wikisource.org/w/api.php?action=query&generator=recentchanges&grclimit=20&prop=info&format=json",
     "license": "CC BY-SA"
   },
   {
     "id": "zh-wiktionary-recent",
     "subject": "chinese",
     "kind": "mediawiki-api",
-    "url": "https://zh.wiktionary.org/w/api.php?action=query&list=recentchanges&rclimit=20&format=json&origin=*",
+    "url": "https://zh.wiktionary.org/w/api.php?action=query&list=recentchanges&rclimit=20&format=json",
     "license": "CC BY-SA"
   },
   {
     "id": "en-wiktionary-recent",
     "subject": "english",
     "kind": "mediawiki-api",
-    "url": "https://en.wiktionary.org/w/api.php?action=query&list=recentchanges&rclimit=20&format=json&origin=*",
+    "url": "https://en.wiktionary.org/w/api.php?action=query&list=recentchanges&rclimit=20&format=json",
     "license": "CC BY-SA"
   },
   {

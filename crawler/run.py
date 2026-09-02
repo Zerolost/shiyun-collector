@@ -32,7 +32,10 @@ async def fetch_source(client: httpx.AsyncClient, source: dict[str, Any]) -> dic
 async def main() -> None:
   sources: list[dict[str, Any]] = json.loads(REGISTRY.read_text("utf-8"))
   OUT.mkdir(parents=True, exist_ok=True)
-  headers: dict[str, str] = {"User-Agent": "ShiyunCollector/1.0 (personal educational indexer)"}
+  headers: dict[str, str] = {
+    "User-Agent": "ShiyunCollector/1.0 (https://github.com/Zerolost/shiyun-collector; contact via GitHub)",
+    "Api-User-Agent": "ShiyunCollector/1.0 (https://github.com/Zerolost/shiyun-collector; contact via GitHub)"
+  }
   limits = httpx.Limits(max_connections=8, max_keepalive_connections=4)
   async with httpx.AsyncClient(headers=headers, limits=limits) as client:
     results = await asyncio.gather(*(fetch_source(client, source) for source in sources), return_exceptions=True)
