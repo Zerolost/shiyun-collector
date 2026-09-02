@@ -29,10 +29,11 @@ Core collection pipeline is running.
 
 ## Remaining setup
 
-- Sign in to `https://console.cron-job.org/`
-- Create a POST job for `https://shiyun-collector.pocketbay.app/internal/dispatch`
-- Add request header `X-Cron-Secret`; its value has been copied to the iOS clipboard
-- Recommended initial interval: every 10 minutes
+- Sign in again to `https://console.cron-job.org/` because the browser session expired before saving jobs
+- Create wake job: `GET https://shiyun-collector.pocketbay.app/health`, cron `0,30 * * * *`
+- Create dispatch job: `POST https://shiyun-collector.pocketbay.app/internal/dispatch`, cron `2,32 * * * *`
+- Add request header `X-Cron-Secret`; the rotated value has been copied to the iOS clipboard
+- This gives PocketBay roughly 28 minutes of idle time between collection windows so it may sleep
 
 ## Notes
 
