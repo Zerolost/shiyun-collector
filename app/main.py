@@ -3,7 +3,10 @@ import os
 from typing import Any
 
 import httpx
+from dotenv import load_dotenv
 from fastapi import FastAPI, Header, HTTPException
+
+load_dotenv()
 
 app = FastAPI(title="Shiyun Collector Gateway", docs_url=None, redoc_url=None)
 
