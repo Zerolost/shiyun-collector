@@ -24,7 +24,12 @@ async def health() -> dict[str, str]:
 
 
 @app.post("/internal/dispatch", status_code=202)
-async def dispatch(x_cron_secret: str = Header(default="")) -> dict[str, Any]:
+async def dispatch(
+  profile: str = "frequent",
+  x_cron_secret: str = Header(default="")
+) -> dict[str, Any]:
+  if profile not in {"frequent", "daily", "weekly"}:
+    raise HTTPException(status_code=400, detail="Invalid collection profile")
   expected: str = required_env("CRON_SECRET")
   if not hmac.compare_digest(x_cron_secret, expected):
     raise HTTPException(status_code=401, detail="Unauthorized")
@@ -40,7 +45,7 @@ async def dispatch(x_cron_secret: str = Header(default="")) -> dict[str, Any]:
     "X-GitHub-Api-Version": "2022-11-28"
   }
   async with httpx.AsyncClient(timeout=20) as client:
-    response: httpx.Response = await client.post(url, headers=headers, json={"ref": "main"})
+    response: httpx.Response = await client.post(url, headers=headers, json={"ref": "main", "inputs": {"profile": profile}})
   if response.status_code != 204:
     raise HTTPException(status_code=502, detail=f"GitHub dispatch failed: {response.status_code}")
-  return {"accepted": True, "workflow": workflow}
+  return {"accepted": True, "workflow": workflow, "profile": profile}

@@ -1,30 +1,127 @@
 [
   {
-    "id": "zh-wikisource-main",
+    "id": "zh-wikiquote",
     "subject": "chinese",
-    "kind": "mediawiki-api",
-    "url": "https://zh.wikisource.org/w/api.php?action=query&generator=recentchanges&grclimit=20&prop=info&format=json",
-    "license": "CC BY-SA"
+    "module": "famous_quote",
+    "adapter": "mediawiki",
+    "frequency": "frequent",
+    "url": "https://zh.wikiquote.org/w/api.php?action=query&generator=recentchanges&grclimit=20&grcnamespace=0&prop=extracts%7Cinfo&explaintext=1&exintro=1&format=json",
+    "timeout": 120,
+    "homepage": "https://zh.wikiquote.org/",
+    "license": "CC BY-SA",
+    "tags": ["名言", "语录"]
   },
   {
-    "id": "zh-wiktionary-recent",
+    "id": "zh-wikipedia-current",
     "subject": "chinese",
-    "kind": "mediawiki-api",
-    "url": "https://zh.wiktionary.org/w/api.php?action=query&list=recentchanges&rclimit=20&format=json",
-    "license": "CC BY-SA"
+    "module": "essay_material",
+    "adapter": "mediawiki",
+    "frequency": "frequent",
+    "url": "https://zh.wikipedia.org/w/api.php?action=query&generator=recentchanges&grclimit=30&grcnamespace=0&prop=extracts|info&explaintext=1&exintro=1&format=json",
+    "homepage": "https://zh.wikipedia.org/",
+    "license": "CC BY-SA",
+    "tags": ["现代文", "百科", "作文素材"]
   },
   {
-    "id": "en-wiktionary-recent",
-    "subject": "english",
-    "kind": "mediawiki-api",
-    "url": "https://en.wiktionary.org/w/api.php?action=query&list=recentchanges&rclimit=20&format=json",
-    "license": "CC BY-SA"
+    "id": "zh-wikisource",
+    "subject": "chinese",
+    "module": "classical_text",
+    "adapter": "mediawiki",
+    "frequency": "frequent",
+    "url": "https://zh.wikisource.org/w/api.php?action=query&generator=recentchanges&grclimit=30&grcnamespace=0&prop=extracts|info&explaintext=1&exintro=1&format=json",
+    "homepage": "https://zh.wikisource.org/",
+    "license": "CC BY-SA",
+    "tags": ["公版", "古典文学"]
   },
   {
-    "id": "gutenberg-feed",
+    "id": "en-wiktionary",
     "subject": "english",
-    "kind": "atom",
+    "module": "vocabulary",
+    "adapter": "mediawiki",
+    "frequency": "frequent",
+    "url": "https://en.wiktionary.org/w/api.php?action=query&generator=recentchanges&grclimit=50&grcnamespace=0&prop=extracts|info&explaintext=1&exintro=1&format=json",
+    "homepage": "https://en.wiktionary.org/",
+    "license": "CC BY-SA",
+    "tags": ["dictionary", "vocabulary"]
+  },
+  {
+    "id": "gutenberg-new-books",
+    "subject": "english",
+    "module": "reading_material",
+    "adapter": "rss",
+    "frequency": "frequent",
     "url": "https://www.gutenberg.org/cache/epub/feeds/today.rss",
-    "license": "Public domain metadata"
+    "homepage": "https://www.gutenberg.org/",
+    "license": "Public domain metadata",
+    "tags": ["public-domain", "reading"],
+    "limit": 100
+  },
+  {
+    "id": "chinese-poetry-tang-300",
+    "subject": "chinese",
+    "module": "classical_text",
+    "adapter": "chinese_poetry",
+    "frequency": "daily",
+    "url": "https://raw.githubusercontent.com/chinese-poetry/chinese-poetry/master/%E5%85%A8%E5%94%90%E8%AF%97/%E5%94%90%E8%AF%97%E4%B8%89%E7%99%BE%E9%A6%96.json",
+    "homepage": "https://github.com/chinese-poetry/chinese-poetry",
+    "license": "MIT",
+    "collection": "唐诗三百首",
+    "tags": ["唐诗", "古诗文"],
+    "limit": 400
+  },
+  {
+    "id": "chinese-poetry-song-300",
+    "subject": "chinese",
+    "module": "classical_text",
+    "adapter": "chinese_poetry",
+    "frequency": "daily",
+    "url": "https://raw.githubusercontent.com/chinese-poetry/chinese-poetry/master/%E5%AE%8B%E8%AF%8D/%E5%AE%8B%E8%AF%8D%E4%B8%89%E7%99%BE%E9%A6%96.json",
+    "homepage": "https://github.com/chinese-poetry/chinese-poetry",
+    "license": "MIT",
+    "collection": "宋词三百首",
+    "tags": ["宋词", "古诗文"],
+    "limit": 400
+  },
+  {
+    "id": "chinese-poetry-shijing",
+    "subject": "chinese",
+    "module": "classical_text",
+    "adapter": "chinese_poetry",
+    "frequency": "daily",
+    "url": "https://raw.githubusercontent.com/chinese-poetry/chinese-poetry/master/%E8%AF%97%E7%BB%8F/shijing.json",
+    "homepage": "https://github.com/chinese-poetry/chinese-poetry",
+    "license": "MIT",
+    "collection": "诗经",
+    "tags": ["诗经", "古诗文"],
+    "limit": 400
+  },
+  {
+    "id": "tatoeba-english",
+    "subject": "english",
+    "module": "sentence_corpus",
+    "adapter": "tatoeba",
+    "frequency": "daily",
+    "url": "https://downloads.tatoeba.org/exports/per_language/eng/eng_sentences.tsv.bz2",
+    "homepage": "https://tatoeba.org/",
+    "license": "CC BY 2.0 FR / mixed CC0 subset",
+    "language": "eng",
+    "tags": ["example-sentence", "english"],
+    "limit": 8000,
+    "minLength": 35,
+    "maxLength": 220,
+    "timeout": 180
+  },
+  {
+    "id": "open-english-wordnet-2025",
+    "subject": "english",
+    "module": "vocabulary",
+    "adapter": "wordnet",
+    "frequency": "weekly",
+    "url": "https://github.com/globalwordnet/english-wordnet/releases/download/2025-edition/english-wordnet-2025-json.zip",
+    "homepage": "https://en-word.net/",
+    "license": "WordNet License + CC BY 4.0",
+    "tags": ["wordnet", "vocabulary"],
+    "limit": 8000,
+    "timeout": 180
   }
 ]
