@@ -2,6 +2,16 @@ name: Crawl language sources
 
 on:
   workflow_dispatch:
+    inputs:
+      profile:
+        description: Collection frequency profile
+        required: true
+        default: frequent
+        type: choice
+        options:
+          - frequent
+          - daily
+          - weekly
 
 concurrency:
   group: shiyun-collector
@@ -13,7 +23,7 @@ permissions:
 jobs:
   collect:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -21,7 +31,7 @@ jobs:
           python-version: "3.12"
           cache: pip
       - run: pip install -r requirements.txt
-      - run: python crawler/run.py
+      - run: python crawler/run.py --profile "${{ inputs.profile }}"
       - name: Clone private data repository
         env:
           DATA_REPO_TOKEN: ${{ secrets.DATA_REPO_TOKEN }}
