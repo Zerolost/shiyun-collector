@@ -10,6 +10,7 @@ from typing import Any, Callable
 import httpx
 
 from models import NormalizedItem, SourceResult
+from normalize import normalize_item
 
 ROOT = Path(__file__).resolve().parents[1]
 REGISTRY = ROOT / "sources" / "registry.json"
@@ -81,7 +82,7 @@ async def main() -> None:
       continue
     collected.append(result)
     all_items.extend(result["items"])
-  normalized: list[NormalizedItem] = deduplicate(all_items)
+  normalized: list[NormalizedItem] = [normalize_item(item) for item in deduplicate(all_items)]
   (OUT / "normalized.json").write_text(json.dumps(normalized, ensure_ascii=False, indent=2), "utf-8")
   report: dict[str, Any] = {
     "profile": args.profile,

@@ -32,7 +32,7 @@ def parse(payload: bytes, source: dict[str, Any]) -> list[NormalizedItem]:
             "subject": "english",
             "module": "vocabulary",
             "title": word,
-            "text": "",
+            "text": f"{word} ({part_of_speech})",
             "sourceId": source["id"],
             "sourceUrl": source["homepage"],
             "license": source["license"],

@@ -1,0 +1,28 @@
+from typing import Any
+
+try:
+  from opencc import OpenCC
+except ImportError:
+  OpenCC = None
+
+
+def to_simplified(value: str) -> str:
+  if OpenCC is None:
+    return value
+  return OpenCC("t2s").convert(value)
+
+
+def normalize_item(item: dict[str, Any]) -> dict[str, Any]:
+  output: dict[str, Any] = dict(item)
+  for key in ("title", "text", "translation", "author"):
+    if isinstance(output.get(key), str):
+      output[key] = to_simplified(output[key])
+  if isinstance(output.get("tags"), list):
+    output["tags"] = [to_simplified(str(tag)) for tag in output["tags"]]
+  metadata: Any = output.get("metadata")
+  if isinstance(metadata, dict):
+    output["metadata"] = {
+      key: to_simplified(value) if isinstance(value, str) else value
+      for key, value in metadata.items()
+    }
+  return output
