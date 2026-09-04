@@ -123,5 +123,18 @@
     "tags": ["wordnet", "vocabulary"],
     "limit": 8000,
     "timeout": 180
+  },
+  {
+    "id": "ecdict-open-english-chinese",
+    "subject": "english",
+    "module": "vocabulary",
+    "adapter": "ecdict",
+    "frequency": "weekly",
+    "url": "https://raw.githubusercontent.com/skywind3000/ECDICT/master/ecdict.csv",
+    "homepage": "https://github.com/skywind3000/ECDICT",
+    "license": "MIT",
+    "tags": ["英汉", "词汇", "翻译"],
+    "limit": 20000,
+    "timeout": 180
   }
 ]

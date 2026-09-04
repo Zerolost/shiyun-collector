@@ -13,6 +13,12 @@ def parse(payload: bytes, source: dict[str, Any]) -> list[NormalizedItem]:
   items: list[NormalizedItem] = []
   limit: int = int(source.get("limit", 8000))
   with zipfile.ZipFile(io.BytesIO(payload)) as archive:
+    synsets: dict[str, dict[str, Any]] = {}
+    for name in archive.namelist():
+      if not name.endswith(".json") or name.startswith("entries-"):
+        continue
+      data: dict[str, dict[str, Any]] = json.loads(archive.read(name))
+      synsets.update(data)
     entry_files: list[str] = sorted(name for name in archive.namelist() if name.startswith("entries-") and name.endswith(".json"))
     for name in entry_files:
       data: dict[str, Any] = json.loads(archive.read(name))
@@ -27,12 +33,18 @@ def parse(payload: bytes, source: dict[str, Any]) -> list[NormalizedItem]:
           senses: list[dict[str, Any]] = details.get("sense", [])
           if not senses:
             continue
+          definitions: list[str] = []
+          examples: list[str] = []
+          for sense in senses[:5]:
+            synset: dict[str, Any] = synsets.get(str(sense.get("synset")), {})
+            definitions.extend(str(value) for value in synset.get("definition", []))
+            examples.extend(str(value) for value in synset.get("example", []))
           items.append({
             "id": f"{source['id']}:{word.lower()}:{part_of_speech}",
             "subject": "english",
             "module": "vocabulary",
             "title": word,
-            "text": f"{word} ({part_of_speech})",
+            "text": "; ".join(dict.fromkeys(definitions)),
             "sourceId": source["id"],
             "sourceUrl": source["homepage"],
             "license": source["license"],
@@ -40,6 +52,8 @@ def parse(payload: bytes, source: dict[str, Any]) -> list[NormalizedItem]:
             "metadata": {
               "partOfSpeech": part_of_speech,
               "phonetic": pronunciation,
+              "englishDefinitions": list(dict.fromkeys(definitions)),
+              "englishExamples": list(dict.fromkeys(examples)),
               "senseIds": [sense.get("id") for sense in senses[:5]],
               "synsetIds": [sense.get("synset") for sense in senses[:5]]
             }
