@@ -1,42 +1,60 @@
-# Implementation Status
+# Shiyun Collector Status
 
-## Status
+## Current status
 
-Core collection pipeline is running.
+The cloud data layer is not yet complete for Shiyun integration.
 
-## GitHub
+## Latest verified private data
 
-- Public collector repository: `Zerolost/shiyun-collector`
-- Private data repository: `Zerolost/shiyun-data`
-- Workflow: `.github/workflows/crawl.yml`
-- Secrets configured: `DATA_REPO`, `DATA_REPO_TOKEN`
+- Repository: `Zerolost/shiyun-data`
+- Schema: 3
+- Total normalized items: 40,913
+- Latest profile: weekly
+- Collection errors: 0
 
-## PocketBay
+## Current normalized modules
 
-- URL: `https://shiyun-collector.pocketbay.app`
-- Health: `GET /health` returns 200
-- Dispatch: `POST /internal/dispatch` returns 202 with a valid `X-Cron-Secret`
+- Chinese quotes: 2,891
+- Chinese classical text: 1,270
+- Chinese essay material: 218
+- Chinese famous quotes: 11
+- Chinese language techniques: 1,000
+- English bilingual sentences: 648, all with translations
+- English grammar: 5
+- English long sentences: 288, all with translations
+- English generated questions: 1,000
+- English reading material: 41
+- English sentence corpus: 8,000
+- English vocabulary: 25,541
 
-## Collection
+## Completed in the latest cycle
 
-- Registered sources: 4
-- Latest remote collection: 4 successful, 0 errors
-- Private manifest contains 4 raw source files
+- ECDICT and Open English WordNet vocabulary merge
+- Chinese traditional-to-simplified conversion
+- Tatoeba English-Chinese sentence pairs
+- Rule-based Chinese themes, argument angles and language-technique evidence
+- Rule-based English long-sentence derivation
+- Rule-based English vocabulary questions
+- Normalized-data quality gate
+- Frequent, daily and weekly collection profiles
+- GitHub Actions remote runs for daily and weekly profiles
 
-## Verified chain
+## Known gaps before Shiyun integration
 
-`PocketBay dispatch → GitHub Actions → source collection → private repository publish` completed successfully.
+- English vocabulary needs reliable Chinese translation coverage in the final schema, not only metadata.
+- English grammar has only a small foundation set and needs broader high-school coverage.
+- English word stories are not yet populated.
+- Chinese modern good phrases need richer explanation, usage context, imitation examples and review.
+- Chinese essay material needs verified facts, themes, argument angles and usage cautions.
+- Chinese reading comprehension and Chinese grammar/technique curriculum need dedicated modules.
+- Generated questions are rule-based and require stronger review before educational use.
+- Stage classification is currently source/rule based and needs high-school level curation.
+- Oxford and Cambridge data are not included without an official API or license.
 
-## Remaining setup
+## Decision
 
-- Sign in again to `https://console.cron-job.org/` because the browser session expired before saving jobs
-- Create wake job: `GET https://shiyun-collector.pocketbay.app/health`, cron `0,30 * * * *`
-- Create dispatch job: `POST https://shiyun-collector.pocketbay.app/internal/dispatch`, cron `2,32 * * * *`
-- Add request header `X-Cron-Secret`; the rotated value has been copied to the iOS clipboard
-- This gives PocketBay roughly 28 minutes of idle time between collection windows so it may sleep
+Do not start Shiyun cloud-data integration yet. Continue data completion and quality review until all required Chinese and English modules are non-empty with required fields and a published data contract.
 
-## Notes
+## Scheduler
 
-- PocketBay does not run Cron workers; cron-job.org provides scheduling.
-- The workflow runs in the public collector repository, avoiding private-repository Actions minute limits for the collection job.
-- Do not expose the cron secret or GitHub tokens in code, logs, or chat.
+Use direct cron-job.org to GitHub Actions dispatch. PocketBay is not required for scheduled collection. GitHub workflow dispatch success is HTTP 204.
