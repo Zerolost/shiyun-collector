@@ -19,8 +19,8 @@ def main() -> None:
         errors.append(f"{item_id}:missing-{field}")
     if item.get("module") in {"bilingual_sentence", "long_sentence", "grammar"} and not item.get("translation"):
       errors.append(f"{item_id}:missing-translation")
-    if item.get("subject") == "english" and item.get("module") == "vocabulary" and not item.get("translation") and not item.get("metadata", {}).get("chineseMeaning"):
-      errors.append(f"{item_id}:missing-chinese-meaning")
+    if item.get("subject") == "english" and item.get("module") == "vocabulary" and not item.get("translation") and not item.get("metadata", {}).get("chineseMeaning") and not item.get("metadata", {}).get("englishDefinitions"):
+      errors.append(f"{item_id}:missing-definition" )
     if item.get("module") == "vocabulary":
       metadata: dict[str, Any] = item.get("metadata", {})
       if not metadata.get("chineseMeaning") and not metadata.get("englishDefinitions") and not item.get("text"):
