@@ -96,6 +96,45 @@
     "limit": 400
   },
   {
+    "id": "chinese-poetry-chuci",
+    "subject": "chinese",
+    "module": "classical_text",
+    "adapter": "chinese_poetry",
+    "frequency": "daily",
+    "url": "https://raw.githubusercontent.com/chinese-poetry/chinese-poetry/master/%E6%A5%9A%E8%BE%9E/chuci.json",
+    "homepage": "https://github.com/chinese-poetry/chinese-poetry",
+    "license": "MIT",
+    "collection": "楚辞",
+    "tags": ["楚辞", "古诗文", "修辞手法"],
+    "limit": 300
+  },
+  {
+    "id": "chinese-poetry-lunyu",
+    "subject": "chinese",
+    "module": "classical_text",
+    "adapter": "chinese_poetry",
+    "frequency": "daily",
+    "url": "https://raw.githubusercontent.com/chinese-poetry/chinese-poetry/master/%E8%AE%BA%E8%AF%AD/lunyu.json",
+    "homepage": "https://github.com/chinese-poetry/chinese-poetry",
+    "license": "MIT",
+    "collection": "论语",
+    "tags": ["论语", "名言", "议论文素材"],
+    "limit": 300
+  },
+  {
+    "id": "chinese-poetry-mengzi",
+    "subject": "chinese",
+    "module": "classical_text",
+    "adapter": "chinese_poetry",
+    "frequency": "daily",
+    "url": "https://raw.githubusercontent.com/chinese-poetry/chinese-poetry/master/%E5%9B%9B%E4%B9%A6%E4%BA%94%E7%BB%8F/mengzi.json",
+    "homepage": "https://github.com/chinese-poetry/chinese-poetry",
+    "license": "MIT",
+    "collection": "孟子",
+    "tags": ["孟子", "名言", "议论文素材"],
+    "limit": 300
+  },
+  {
     "id": "tatoeba-english",
     "subject": "english",
     "module": "sentence_corpus",

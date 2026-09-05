@@ -59,6 +59,38 @@ def deduplicate(items: list[NormalizedItem]) -> list[NormalizedItem]:
   return output
 
 
+def enrich_english(items: list[NormalizedItem]) -> list[NormalizedItem]:
+  translations: dict[str, dict[str, Any]] = {}
+  for item in items:
+    if item.get("subject") != "english" or item.get("sourceId") != "ecdict-open-english-chinese":
+      continue
+    metadata: dict[str, Any] = item.get("metadata", {})
+    translations[str(item.get("title", "")).casefold()] = {
+      "chineseMeaning": metadata.get("chineseMeaning", item.get("text", "")),
+      "phonetic": metadata.get("phonetic", ""),
+      "partOfSpeech": metadata.get("partOfSpeech", "")
+    }
+  output: list[NormalizedItem] = []
+  for item in items:
+    if item.get("subject") != "english":
+      output.append(item)
+      continue
+    match: dict[str, Any] | None = translations.get(str(item.get("title", "")).casefold())
+    if match is None:
+      output.append(item)
+      continue
+    metadata: dict[str, Any] = dict(item.get("metadata", {}))
+    metadata["chineseMeaning"] = match["chineseMeaning"]
+    metadata["translationSource"] = "ECDICT"
+    if not metadata.get("phonetic") and match["phonetic"]:
+      metadata["phonetic"] = match["phonetic"]
+    if not metadata.get("partOfSpeech") and match["partOfSpeech"]:
+      metadata["partOfSpeech"] = match["partOfSpeech"]
+    item["metadata"] = metadata
+    output.append(item)
+  return output
+
+
 async def main() -> None:
   cli = argparse.ArgumentParser()
   cli.add_argument("--profile", choices=["frequent", "daily", "weekly", "all"], default="frequent")
@@ -82,7 +114,7 @@ async def main() -> None:
       continue
     collected.append(result)
     all_items.extend(result["items"])
-  normalized: list[NormalizedItem] = [normalize_item(item) for item in deduplicate(all_items)]
+  normalized: list[NormalizedItem] = enrich_english([normalize_item(item) for item in deduplicate(all_items)])
   (OUT / "normalized.json").write_text(json.dumps(normalized, ensure_ascii=False, indent=2), "utf-8")
   report: dict[str, Any] = {
     "profile": args.profile,
