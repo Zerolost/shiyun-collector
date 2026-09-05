@@ -21,6 +21,10 @@ def normalize_item(item: dict[str, Any]) -> dict[str, Any]:
     output["tags"] = [to_simplified(str(tag)) for tag in output["tags"]]
   metadata: Any = output.get("metadata")
   if isinstance(metadata, dict):
+    if output.get("subject") == "english" and output.get("module") in {"vocabulary", "bilingual_sentence", "long_sentence", "grammar"}:
+      metadata["learningStage"] = metadata.get("learningStage", "high-school-core")
+    if output.get("subject") == "chinese":
+      metadata["learningStage"] = metadata.get("learningStage", "high-school-core")
     output["metadata"] = {
       key: to_simplified(value) if isinstance(value, str) else value
       for key, value in metadata.items()

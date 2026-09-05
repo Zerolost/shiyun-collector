@@ -48,7 +48,9 @@ def merge_vocabulary(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
     preferred["id"] = f"english-vocabulary:{key}"
     preferred["tags"] = list(dict.fromkeys(tags))
     preferred["metadata"] = metadata
-    preferred["text"] = str(metadata.get("chineseMeaning") or "; ".join(metadata["englishDefinitions"]))
+    preferred["text"] = str(metadata.get("englishDefinitions") and "; ".join(metadata["englishDefinitions"]) or metadata.get("chineseMeaning", ""))
+    preferred["translation"] = str(metadata.get("chineseMeaning", ""))
+    preferred["metadata"] = {**metadata, "learningStage": "high-school-core"}
     merged.append(preferred)
   non_vocabulary: list[dict[str, Any]] = [item for item in items if not (item.get("subject") == "english" and item.get("module") == "vocabulary")]
   return non_vocabulary + merged
@@ -57,8 +59,8 @@ def merge_vocabulary(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
 def main() -> None:
   target = Path(os.environ["DATA_REPO_DIR"])
   items: list[dict[str, Any]] = json.loads((DATA / "normalized.json").read_text("utf-8"))
-  items = merge_vocabulary(items)
   report: dict[str, Any] = json.loads((DATA / "report.json").read_text("utf-8"))
+  items = merge_vocabulary(items)
   normalized = target / "normalized"
   normalized.mkdir(parents=True, exist_ok=True)
   groups: dict[str, list[dict[str, Any]]] = {}
@@ -75,6 +77,28 @@ def main() -> None:
         previous = json.loads(path.read_text("utf-8"))
       except (json.JSONDecodeError, OSError):
         previous = []
+    if key == "english/vocabulary" and report["profile"] == "weekly":
+      sentence_paths: list[Path] = [normalized / "english" / "sentence_corpus.json", normalized / "english" / "bilingual_sentence.json"]
+      sentences: list[dict[str, Any]] = []
+      for sentence_path in sentence_paths:
+        if sentence_path.exists():
+          sentences.extend(json.loads(sentence_path.read_text("utf-8")))
+      for value in values:
+        word: str = str(value.get("title", ""))
+        examples: list[dict[str, str]] = []
+        for sentence in sentences:
+          text: str = str(sentence.get("text", ""))
+          tokens: set[str] = {token.casefold().strip(".,!?;:'\"()[]{}") for token in text.split()}
+          if word.casefold() not in tokens:
+            continue
+          example: dict[str, str] = {"english": text}
+          if sentence.get("translation"):
+            example["chinese"] = str(sentence["translation"])
+          examples.append(example)
+          if len(examples) >= 3:
+            break
+        if examples:
+          value["metadata"] = {**value.get("metadata", {}), "exampleSentences": examples}
     merged: dict[str, dict[str, Any]] = {value["id"]: value for value in previous}
     merged.update({value["id"]: value for value in values})
     path.write_bytes(encoded_json(sorted(merged.values(), key=lambda value: value["id"])))

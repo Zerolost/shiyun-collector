@@ -10,6 +10,7 @@ from typing import Any, Callable
 import httpx
 
 from derive import derive_chinese
+from enrich import enrich_items
 from models import NormalizedItem, SourceResult
 from normalize import normalize_item
 from teaching import derive_teaching_items
@@ -153,7 +154,7 @@ async def main() -> None:
       continue
     collected.append(result)
     all_items.extend(result["items"])
-  normalized: list[NormalizedItem] = derive_teaching_items(derive_chinese(enrich_english([normalize_item(item) for item in deduplicate(all_items)])))
+  normalized: list[NormalizedItem] = enrich_items(derive_teaching_items(derive_chinese(enrich_english([normalize_item(item) for item in deduplicate(all_items)]))))
   (OUT / "normalized.json").write_text(json.dumps(normalized, ensure_ascii=False, indent=2), "utf-8")
   report: dict[str, Any] = {
     "profile": args.profile,

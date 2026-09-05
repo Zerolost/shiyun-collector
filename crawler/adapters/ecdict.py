@@ -21,6 +21,7 @@ def parse(payload: bytes, source: dict[str, Any]) -> list[NormalizedItem]:
       "module": "vocabulary",
       "title": word,
       "text": translation,
+      "translation": translation,
       "sourceId": source["id"],
       "sourceUrl": source["homepage"],
       "license": source["license"],

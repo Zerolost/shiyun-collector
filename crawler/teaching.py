@@ -114,3 +114,53 @@ def derive_chinese_techniques(items: list[NormalizedItem], limit: int = 1000) ->
 
 def derive_teaching_items(items: list[NormalizedItem]) -> list[NormalizedItem]:
   return items + derive_long_sentences(items) + derive_vocabulary_questions(items) + derive_chinese_techniques(items)
+
+
+def derive_word_stories(items: list[NormalizedItem], limit: int = 200) -> list[NormalizedItem]:
+  pairs: list[NormalizedItem] = [item for item in items if item.get("module") == "bilingual_sentence" and item.get("translation")]
+  output: list[NormalizedItem] = []
+  for index in range(0, min(len(pairs), limit * 3), 3):
+    group: list[NormalizedItem] = pairs[index:index + 3]
+    if len(group) < 3:
+      break
+    story: str = " ".join(str(item.get("text", "")) for item in group)
+    translation: str = "".join(str(item.get("translation", "")) for item in group)
+    output.append({
+      "id": stable_id("derived-word-story", str(group[0]["id"])),
+      "subject": "english",
+      "module": "word_story",
+      "title": f"Daily language story {index // 3 + 1}",
+      "text": story,
+      "translation": translation,
+      "sourceId": str(group[0].get("sourceId", "")),
+      "sourceUrl": str(group[0].get("sourceUrl", "")),
+      "license": str(group[0].get("license", "")),
+      "tags": ["单词故事", "中英对照", "语料编排"],
+      "metadata": {"sentenceIds": [item["id"] for item in group], "storyStatus": "corpus-compiled"}
+    })
+  return output
+
+
+def derive_chinese_reading(items: list[NormalizedItem], limit: int = 500) -> list[NormalizedItem]:
+  source: list[NormalizedItem] = [item for item in items if item.get("subject") == "chinese" and item.get("module") == "essay_material"]
+  output: list[NormalizedItem] = []
+  for item in source[:limit]:
+    output.append({
+      "id": stable_id("derived-chinese-reading", str(item["id"])),
+      "subject": "chinese",
+      "module": "chinese_reading",
+      "title": f"{item.get('title', '现代文')}阅读理解",
+      "text": str(item.get("text", "")),
+      "sourceId": str(item.get("sourceId", "")),
+      "sourceUrl": str(item.get("sourceUrl", "")),
+      "license": str(item.get("license", "")),
+      "tags": list(dict.fromkeys(item.get("tags", []) + ["阅读理解", "信息提取"])),
+      "metadata": {"questions": ["概括文本主要内容", "结合文本分析表达效果"], "answerGuide": "依据文本事实组织答案，结合关键词分点作答", "originContentId": item["id"]}
+    })
+  return output
+
+
+def derive_teaching_items(items: list[NormalizedItem]) -> list[NormalizedItem]:
+  derived: list[NormalizedItem] = derive_long_sentences(items) + derive_vocabulary_questions(items) + derive_chinese_techniques(items) + derive_word_stories(items) + derive_chinese_reading(items)
+  unique: dict[str, NormalizedItem] = {item["id"]: item for item in derived}
+  return items + list(unique.values())
