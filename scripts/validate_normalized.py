@@ -27,6 +27,12 @@ def main() -> None:
       metadata = item.get("metadata", {})
       if not item.get("translation") or not metadata.get("stage") or not metadata.get("keyPoints"):
         errors.append(f"{item_id}:incomplete-grammar")
+    if item.get("module") == "long_sentence" and (not item.get("translation") or not item.get("metadata", {}).get("structures")):
+      errors.append(f"{item_id}:incomplete-long-sentence")
+    if item.get("module") == "question":
+      metadata = item.get("metadata", {})
+      if not metadata.get("options") or not metadata.get("answer") or not metadata.get("explanation"):
+        errors.append(f"{item_id}:incomplete-question")
   print(json.dumps({"items": len(items), "errors": len(errors), "sampleErrors": errors[:20]}, ensure_ascii=False))
   if errors:
     raise SystemExit(1)
