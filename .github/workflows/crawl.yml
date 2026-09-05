@@ -32,6 +32,7 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt
       - run: python crawler/run.py --profile "${{ inputs.profile }}"
+      - run: python scripts/validate_normalized.py
       - name: Clone private data repository
         env:
           DATA_REPO_TOKEN: ${{ secrets.DATA_REPO_TOKEN }}

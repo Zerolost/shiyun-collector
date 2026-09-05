@@ -135,6 +135,17 @@
     "limit": 300
   },
   {
+    "id": "shiyun-grammar-foundation",
+    "subject": "english",
+    "module": "grammar",
+    "adapter": "local_teaching",
+    "frequency": "daily",
+    "path": "sources/teaching_content.json",
+    "homepage": "https://github.com/Zerolost/shiyun-collector",
+    "license": "Original structured teaching notes",
+    "tags": ["高考语法", "讲解"]
+  },
+  {
     "id": "tatoeba-english",
     "subject": "english",
     "module": "sentence_corpus",

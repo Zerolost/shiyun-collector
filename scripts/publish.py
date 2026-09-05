@@ -69,7 +69,8 @@ def main() -> None:
     path: Path = normalized / f"{key}.json"
     path.parent.mkdir(parents=True, exist_ok=True)
     previous: list[dict[str, Any]] = []
-    if path.exists() and key != "english/vocabulary":
+    replace_vocabulary: bool = key == "english/vocabulary" and report["profile"] == "weekly"
+    if path.exists() and not replace_vocabulary:
       try:
         previous = json.loads(path.read_text("utf-8"))
       except (json.JSONDecodeError, OSError):
@@ -89,10 +90,21 @@ def main() -> None:
   reports = target / "reports"
   reports.mkdir(exist_ok=True)
   (reports / f"latest-{report['profile']}.json").write_bytes(encoded_json(report))
+  existing_manifest: dict[str, Any] = {}
+  manifest_path: Path = target / "manifest.json"
+  if manifest_path.exists():
+    try:
+      existing_manifest = json.loads(manifest_path.read_text("utf-8"))
+    except (json.JSONDecodeError, OSError):
+      existing_manifest = {}
+  total_items: int = sum(file["count"] for file in files)
+  previous_total: int = int(existing_manifest.get("totalItems", 0))
+  if report["profile"] == "frequent" and previous_total and total_items < previous_total:
+    raise RuntimeError(f"Frequent publish would reduce total items: {previous_total} -> {total_items}")
   manifest: dict[str, Any] = {
-    "schemaVersion": 2,
+    "schemaVersion": 3,
     "updatedAt": datetime.now(UTC).isoformat(),
-    "totalItems": sum(file["count"] for file in files),
+    "totalItems": total_items,
     "files": files,
     "latestProfile": report["profile"],
     "sourceResults": report["sourceResults"],

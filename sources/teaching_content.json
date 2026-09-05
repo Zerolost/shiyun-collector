@@ -1,0 +1,52 @@
+[
+  {
+    "id": "grammar-relative-clauses",
+    "subject": "english",
+    "module": "grammar",
+    "title": "定语从句",
+    "text": "Relative clauses modify a noun or pronoun. Restrictive clauses identify the referent; non-restrictive clauses add supplementary information and are set off by commas.",
+    "translation": "定语从句修饰名词或代词。限制性定语从句用于确定所指对象；非限制性定语从句补充信息，通常用逗号隔开。",
+    "tags": ["从句", "高考语法"],
+    "metadata": {"stage": "grade10_s2", "keyPoints": ["关系代词", "关系副词", "限制性与非限制性"], "commonErrors": ["关系词缺失", "that用于非限制性从句"]}
+  },
+  {
+    "id": "grammar-nonfinite-verbs",
+    "subject": "english",
+    "module": "grammar",
+    "title": "非谓语动词",
+    "text": "Infinitives, gerunds and participles can function as subjects, objects, complements, attributes or adverbials without serving as the finite predicate.",
+    "translation": "不定式、动名词和分词不作句子的限定谓语，可充当主语、宾语、补语、定语或状语。",
+    "tags": ["非谓语", "高考语法"],
+    "metadata": {"stage": "grade11_s1", "keyPoints": ["主动与被动", "时间先后", "句法成分"], "commonErrors": ["逻辑主语不一致", "完成式误用"]}
+  },
+  {
+    "id": "grammar-noun-clauses",
+    "subject": "english",
+    "module": "grammar",
+    "title": "名词性从句",
+    "text": "Subject, object, predicative and appositive clauses function like nouns. The connector depends on meaning and on whether it has a grammatical role inside the clause.",
+    "translation": "主语从句、宾语从句、表语从句和同位语从句具有名词功能。连接词取决于句意，以及它是否在从句内部充当成分。",
+    "tags": ["从句", "高考语法"],
+    "metadata": {"stage": "grade11_s1", "keyPoints": ["that与what", "whether与if", "陈述语序"], "commonErrors": ["连接词误选", "语序错误"]}
+  },
+  {
+    "id": "grammar-conditional-subjunctive",
+    "subject": "english",
+    "module": "grammar",
+    "title": "虚拟语气",
+    "text": "The subjunctive presents unreal, hypothetical or desired situations. Conditional forms change according to whether the condition concerns the present, past or future.",
+    "translation": "虚拟语气表示非真实、假设或愿望。条件句形式会根据假设针对现在、过去还是将来而变化。",
+    "tags": ["虚拟语气", "高考语法"],
+    "metadata": {"stage": "grade11_s2", "keyPoints": ["错综时间", "省略if倒装", "wish与suggest"], "commonErrors": ["时态组合错误"]}
+  },
+  {
+    "id": "grammar-inversion-emphasis",
+    "subject": "english",
+    "module": "grammar",
+    "title": "倒装与强调",
+    "text": "Partial inversion places an auxiliary before the subject after certain negative or restrictive expressions. The emphatic pattern is It is or was ... that or who ....",
+    "translation": "部分倒装在某些否定或限制性表达之后把助动词置于主语之前。强调句基本结构为 It is/was ... that/who ...。",
+    "tags": ["倒装", "强调", "高考语法"],
+    "metadata": {"stage": "grade12_review", "keyPoints": ["否定词前置", "only状语前置", "强调句判断"], "commonErrors": ["主谓全部倒装", "强调句与定语从句混淆"]}
+  }
+]

@@ -9,6 +9,7 @@ from typing import Any, Callable
 
 import httpx
 
+from derive import derive_chinese
 from models import NormalizedItem, SourceResult
 from normalize import normalize_item
 
@@ -39,6 +40,15 @@ async def fetch_one(client: httpx.AsyncClient, url: str, timeout: int) -> bytes:
 
 
 async def fetch_source(client: httpx.AsyncClient, source: dict[str, Any]) -> SourceResult:
+  if source["adapter"] == "local_teaching":
+    payload: bytes = (ROOT / source["path"]).read_bytes()
+    parser: Parser = load_parser(source["adapter"])
+    return {
+      "source": source,
+      "items": parser(payload, source),
+      "rawSha256": hashlib.sha256(payload).hexdigest(),
+      "retrievedAt": datetime.now(UTC).isoformat()
+    }
   if source["adapter"] == "tatoeba_pairs":
     urls: list[str] = source["urls"]
     payloads: list[bytes] = await asyncio.gather(*(fetch_one(client, url, int(source.get("timeout", 180))) for url in urls))
@@ -139,7 +149,7 @@ async def main() -> None:
       continue
     collected.append(result)
     all_items.extend(result["items"])
-  normalized: list[NormalizedItem] = enrich_english([normalize_item(item) for item in deduplicate(all_items)])
+  normalized: list[NormalizedItem] = derive_chinese(enrich_english([normalize_item(item) for item in deduplicate(all_items)]))
   (OUT / "normalized.json").write_text(json.dumps(normalized, ensure_ascii=False, indent=2), "utf-8")
   report: dict[str, Any] = {
     "profile": args.profile,
