@@ -23,7 +23,32 @@ def load_parser(adapter: str) -> Parser:
   return module.parse
 
 
+async def fetch_one(client: httpx.AsyncClient, url: str, timeout: int) -> bytes:
+  response: httpx.Response | None = None
+  last_error: Exception | None = None
+  for attempt in range(3):
+    try:
+      response = await client.get(url, follow_redirects=True, timeout=timeout)
+      response.raise_for_status()
+      return response.content
+    except (httpx.HTTPError, httpx.TimeoutException) as error:
+      last_error = error
+      if attempt < 2:
+        await asyncio.sleep(2 ** attempt)
+  raise RuntimeError(repr(last_error))
+
+
 async def fetch_source(client: httpx.AsyncClient, source: dict[str, Any]) -> SourceResult:
+  if source["adapter"] == "tatoeba_pairs":
+    urls: list[str] = source["urls"]
+    payloads: list[bytes] = await asyncio.gather(*(fetch_one(client, url, int(source.get("timeout", 180))) for url in urls))
+    parser: Parser = load_parser(source["adapter"])
+    return {
+      "source": source,
+      "items": parser(payloads, source),
+      "rawSha256": hashlib.sha256(b"".join(payloads)).hexdigest(),
+      "retrievedAt": datetime.now(UTC).isoformat()
+    }
   response: httpx.Response | None = None
   last_error: Exception | None = None
   for attempt in range(3):

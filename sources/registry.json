@@ -174,6 +174,23 @@
     "license": "MIT",
     "tags": ["英汉", "词汇", "翻译"],
     "limit": 20000,
-    "timeout": 180
+    "timeout": 300
+  },
+  {
+    "id": "tatoeba-english-chinese-pairs",
+    "subject": "english",
+    "module": "bilingual_sentence",
+    "adapter": "tatoeba_pairs",
+    "frequency": "weekly",
+    "urls": [
+      "https://downloads.tatoeba.org/exports/per_language/eng/eng_sentences.tsv.bz2",
+      "https://downloads.tatoeba.org/exports/per_language/cmn/cmn_sentences.tsv.bz2",
+      "https://downloads.tatoeba.org/exports/links.tar.bz2"
+    ],
+    "homepage": "https://tatoeba.org/",
+    "license": "CC BY 2.0 FR / mixed CC0 subset",
+    "tags": ["中英句对", "英语例句"],
+    "limit": 5000,
+    "timeout": 600
   }
 ]

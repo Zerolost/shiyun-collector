@@ -23,23 +23,23 @@ Personal language-content collection pipeline for the Scripting project 诗云.
 - `DATA_REPO`: `owner/private-data-repository`
 - `DATA_REPO_TOKEN`: fine-grained token with Contents write access to the private data repository
 
-## cron-job.org requests
+## Direct cron-job.org scheduling
 
-Create exactly two jobs and do not duplicate them.
-
-Wake job:
-
-- Method: `GET`
-- URL: `https://shiyun-collector.pocketbay.app/health`
-- Schedule: every 30 minutes
-
-Dispatch job:
+PocketBay is not required for scheduled collection. To avoid sleep-layer ambiguity and runtime credits, use one cron-job.org job that calls GitHub Actions directly.
 
 - Method: `POST`
-- URL: `https://shiyun-collector.pocketbay.app/internal/dispatch?profile=frequent`
-- Schedule: two minutes after wake, every 30 minutes
-- Header: `X-Cron-Secret: <current CRON_SECRET>`
+- URL: `https://api.github.com/repos/Zerolost/shiyun-collector/actions/workflows/crawl.yml/dispatches`
+- Schedule: every 30 minutes for `frequent`
+- Header: `Authorization: Bearer <SHIYUN_GITHUB_TOKEN>`
+- Header: `Accept: application/vnd.github+json`
+- Header: `X-GitHub-Api-Version: 2022-11-28`
+- Body: `{"ref":"main","inputs":{"profile":"frequent"}}`
+- Content-Type: `application/json`
 
-A `204` from `/health` can mean the PocketBay app is sleeping or waking. A `403` from `/internal/dispatch` means the header secret is missing or stale; edit the existing dispatch job instead of creating another job. Do not expose the secret in logs or chat.
+A successful GitHub workflow dispatch returns HTTP `204 No Content`. That is expected and means GitHub accepted the trigger. GitHub Actions runs independently after the response.
+
+Token permissions should be restricted to the `Zerolost/shiyun-collector` repository with Actions read/write and the minimum metadata/contents permissions required by the workflow. Do not put the token in source files or logs.
+
+For daily and weekly jobs, create separate schedules with bodies `{"ref":"main","inputs":{"profile":"daily"}}` and `{"ref":"main","inputs":{"profile":"weekly"}}`. Keep one job per profile; do not duplicate jobs.
 
 Only sources with an explicit reusable/public-domain license should be added to `sources/registry.json`.
