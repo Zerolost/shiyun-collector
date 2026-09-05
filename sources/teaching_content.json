@@ -48,5 +48,65 @@
     "translation": "部分倒装在某些否定或限制性表达之后把助动词置于主语之前。强调句基本结构为 It is/was ... that/who ...。",
     "tags": ["倒装", "强调", "高考语法"],
     "metadata": {"stage": "grade12_review", "keyPoints": ["否定词前置", "only状语前置", "强调句判断"], "commonErrors": ["主谓全部倒装", "强调句与定语从句混淆"]}
+  },
+  {
+    "id": "grammar-adverbial-clauses",
+    "subject": "english",
+    "module": "grammar",
+    "title": "状语从句",
+    "text": "Adverbial clauses express time, condition, reason, purpose, result, concession or comparison. Choose a conjunction according to the logical relation.",
+    "translation": "状语从句表达时间、条件、原因、目的、结果、让步或比较关系，应根据逻辑关系选择连词。",
+    "tags": ["状语从句", "高考语法"],
+    "metadata": {"stage": "grade10_s2", "keyPoints": ["时间", "条件", "原因", "让步", "结果"], "commonErrors": ["逻辑关系误判", "时态错误"]}
+  },
+  {
+    "id": "grammar-tenses-voice",
+    "subject": "english",
+    "module": "grammar",
+    "title": "时态与语态",
+    "text": "Tense expresses the relationship between an event and a reference time. Voice shows whether the subject performs or receives the action.",
+    "translation": "时态表达事件与参照时间的关系，语态说明主语是动作执行者还是承受者。",
+    "tags": ["时态", "语态", "高考语法"],
+    "metadata": {"stage": "grade10_s1", "keyPoints": ["完成时", "进行时", "被动语态", "时间标志"], "commonErrors": ["时态与语境不一致", "被动结构缺少be"]}
+  },
+  {
+    "id": "grammar-agreement",
+    "subject": "english",
+    "module": "grammar",
+    "title": "主谓一致",
+    "text": "The finite verb agrees with the grammatical subject, not necessarily with the nearest noun. Identify the true subject before choosing the verb form.",
+    "translation": "限定动词要与语法主语一致，不一定与最近的名词一致。选择动词形式前应先找出真正主语。",
+    "tags": ["主谓一致", "高考语法"],
+    "metadata": {"stage": "grade10_s1", "keyPoints": ["真正主语", "数量结构", "就近原则"], "commonErrors": ["被修饰名词干扰"]}
+  },
+  {
+    "id": "grammar-modal-verbs",
+    "subject": "english",
+    "module": "grammar",
+    "title": "情态动词",
+    "text": "Modal verbs express ability, possibility, permission, obligation, advice or deduction. Past inference often uses modal plus have plus past participle.",
+    "translation": "情态动词表达能力、可能性、许可、义务、建议或推测。对过去情况的推测常用情态动词加 have 加过去分词。",
+    "tags": ["情态动词", "高考语法"],
+    "metadata": {"stage": "grade10_s2", "keyPoints": ["可能与推测", "义务与建议", "完成式"], "commonErrors": ["语气强弱错误"]}
+  },
+  {
+    "id": "grammar-comparison",
+    "subject": "english",
+    "module": "grammar",
+    "title": "比较结构",
+    "text": "Comparative structures express equality, difference, superiority or progressive change. Keep the comparison target clear and grammatically parallel.",
+    "translation": "比较结构表达相同、不同、优劣或渐进变化。要明确比较对象，并保持比较两端语法形式平行。",
+    "tags": ["比较结构", "高考语法"],
+    "metadata": {"stage": "grade11_s2", "keyPoints": ["as...as", "比较级", "the more...the more", "平行结构"], "commonErrors": ["比较对象缺失", "重复比较"]}
+  },
+  {
+    "id": "grammar-articles-prepositions",
+    "subject": "english",
+    "module": "grammar",
+    "title": "冠词与介词",
+    "text": "Articles show whether a noun is general, specific or unique. Prepositions express time, place, direction and abstract relations and should be learned with collocations.",
+    "translation": "冠词表示名词是泛指、特指还是独一无二。介词表达时间、地点、方向和抽象关系，应结合搭配学习。",
+    "tags": ["冠词", "介词", "高考语法"],
+    "metadata": {"stage": "grade10_s1", "keyPoints": ["零冠词", "特指", "时间介词", "固定搭配"], "commonErrors": ["泛指特指混淆", "介词搭配误用"]}
   }
 ]

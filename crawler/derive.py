@@ -36,6 +36,10 @@ def derive_chinese(items: list[NormalizedItem]) -> list[NormalizedItem]:
     techniques: list[str] = match_labels(text, TECHNIQUES)
     metadata["themes"] = themes
     metadata["techniques"] = techniques
+    metadata["argumentAngles"] = themes if item.get("module") in {"classical_text", "famous_quote", "essay_material"} else []
+    metadata["usageContext"] = "用于高中语文积累、主题论证与阅读鉴赏"
+    metadata["imitationPrompt"] = f"围绕{themes[0] if themes else '成长与思考'}，仿写一句具有相近表达张力的话"
+    metadata["misuseWarning"] = "使用前核对原文语境，不脱离出处断章取义"
     metadata["reviewStatus"] = "auto-classified"
     item["metadata"] = metadata
     if item.get("module") != "classical_text":
