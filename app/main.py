@@ -1,3 +1,4 @@
+import base64
 import hmac
 import os
 from typing import Any
@@ -18,6 +19,17 @@ def required_env(name: str) -> str:
   return value
 
 
+def has_valid_basic_auth(authorization: str, expected: str) -> bool:
+  if not authorization.startswith("Basic "):
+    return False
+  try:
+    decoded: str = base64.b64decode(authorization[6:]).decode("utf-8")
+    _, password = decoded.split(":", 1)
+  except (ValueError, UnicodeDecodeError):
+    return False
+  return hmac.compare_digest(password, expected)
+
+
 @app.get("/health")
 async def health() -> dict[str, str]:
   return {"status": "ok"}
@@ -26,12 +38,13 @@ async def health() -> dict[str, str]:
 @app.post("/internal/dispatch", status_code=202)
 async def dispatch(
   profile: str = "frequent",
-  x_cron_secret: str = Header(default="")
+  x_cron_secret: str = Header(default=""),
+  authorization: str = Header(default="")
 ) -> dict[str, Any]:
   if profile not in {"frequent", "daily", "weekly"}:
     raise HTTPException(status_code=400, detail="Invalid collection profile")
   expected: str = required_env("CRON_SECRET")
-  if not hmac.compare_digest(x_cron_secret, expected):
+  if not hmac.compare_digest(x_cron_secret, expected) and not has_valid_basic_auth(authorization, expected):
     raise HTTPException(status_code=401, detail="Unauthorized")
 
   owner: str = required_env("GITHUB_OWNER")
