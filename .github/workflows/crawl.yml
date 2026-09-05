@@ -46,3 +46,11 @@ jobs:
           git -C /tmp/shiyun-data config user.name "${{ github.actor }}"
           git -C /tmp/shiyun-data config user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
           python scripts/publish.py
+      - name: Publish read-only data mirror
+        run: |
+          python scripts/publish_public.py
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
+          git add published
+          git diff --cached --quiet || git commit -m "Publish read-only learning data mirror"
+          git push origin main
