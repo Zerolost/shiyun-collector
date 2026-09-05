@@ -2,13 +2,13 @@
 
 ## Current status
 
-The cloud data layer is not yet complete for Shiyun integration.
+The cloud data contract and core normalized modules are ready for Shiyun integration. Further source expansion and review can continue after the client starts syncing published shards.
 
 ## Latest verified private data
 
 - Repository: `Zerolost/shiyun-data`
 - Schema: 3
-- Total normalized items: 40,913
+- Total normalized items: 42,496
 - Latest profile: weekly
 - Collection errors: 0
 
@@ -20,12 +20,14 @@ The cloud data layer is not yet complete for Shiyun integration.
 - Chinese famous quotes: 11
 - Chinese language techniques: 1,000
 - English bilingual sentences: 648, all with translations
-- English grammar: 5
+- English grammar: 11
 - English long sentences: 288, all with translations
 - English generated questions: 1,000
+- English word stories: 200, all with translations
 - English reading material: 41
 - English sentence corpus: 8,000
 - English vocabulary: 25,541
+- Chinese reading practice: 218
 
 ## Completed in the latest cycle
 
