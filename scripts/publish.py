@@ -18,9 +18,46 @@ def encoded_json(value: Any) -> bytes:
   return json.dumps(value, ensure_ascii=False, indent=2).encode()
 
 
+def merge_vocabulary(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
+  grouped: dict[str, list[dict[str, Any]]] = {}
+  for item in items:
+    if item.get("subject") == "english" and item.get("module") == "vocabulary":
+      grouped.setdefault(str(item.get("title", "")).casefold(), []).append(item)
+  merged: list[dict[str, Any]] = []
+  for key, group in grouped.items():
+    preferred: dict[str, Any] = next((item for item in group if item.get("sourceId") == "ecdict-open-english-chinese"), group[0])
+    metadata: dict[str, Any] = dict(preferred.get("metadata", {}))
+    definitions: list[str] = []
+    examples: list[str] = []
+    sources: list[str] = []
+    licenses: list[str] = []
+    tags: list[str] = []
+    for item in group:
+      item_metadata: dict[str, Any] = item.get("metadata", {})
+      definitions.extend(item_metadata.get("englishDefinitions", []))
+      examples.extend(item_metadata.get("englishExamples", []))
+      sources.append(str(item.get("sourceId", "")))
+      licenses.append(str(item.get("license", "")))
+      tags.extend(item.get("tags", []))
+      if not metadata.get("chineseMeaning") and item_metadata.get("chineseMeaning"):
+        metadata["chineseMeaning"] = item_metadata["chineseMeaning"]
+    metadata["englishDefinitions"] = list(dict.fromkeys(definitions))
+    metadata["englishExamples"] = list(dict.fromkeys(examples))
+    metadata["sourceIds"] = list(dict.fromkeys(sources))
+    metadata["licenses"] = list(dict.fromkeys(licenses))
+    preferred["id"] = f"english-vocabulary:{key}"
+    preferred["tags"] = list(dict.fromkeys(tags))
+    preferred["metadata"] = metadata
+    preferred["text"] = str(metadata.get("chineseMeaning") or "; ".join(metadata["englishDefinitions"]))
+    merged.append(preferred)
+  non_vocabulary: list[dict[str, Any]] = [item for item in items if not (item.get("subject") == "english" and item.get("module") == "vocabulary")]
+  return non_vocabulary + merged
+
+
 def main() -> None:
   target = Path(os.environ["DATA_REPO_DIR"])
   items: list[dict[str, Any]] = json.loads((DATA / "normalized.json").read_text("utf-8"))
+  items = merge_vocabulary(items)
   report: dict[str, Any] = json.loads((DATA / "report.json").read_text("utf-8"))
   normalized = target / "normalized"
   normalized.mkdir(parents=True, exist_ok=True)
@@ -32,7 +69,7 @@ def main() -> None:
     path: Path = normalized / f"{key}.json"
     path.parent.mkdir(parents=True, exist_ok=True)
     previous: list[dict[str, Any]] = []
-    if path.exists():
+    if path.exists() and key != "english/vocabulary":
       try:
         previous = json.loads(path.read_text("utf-8"))
       except (json.JSONDecodeError, OSError):
