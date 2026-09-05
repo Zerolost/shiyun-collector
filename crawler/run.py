@@ -83,13 +83,16 @@ async def fetch_source(client: httpx.AsyncClient, source: dict[str, Any]) -> Sou
 
 
 def deduplicate(items: list[NormalizedItem]) -> list[NormalizedItem]:
-  seen: set[str] = set()
+  seen_ids: set[str] = set()
+  seen_content: set[str] = set()
   output: list[NormalizedItem] = []
   for item in items:
+    item_id: str = str(item.get("id", ""))
     fingerprint: str = hashlib.sha256(f"{item.get('subject')}|{item.get('module')}|{item.get('title')}|{item.get('text')}".encode()).hexdigest()
-    if fingerprint in seen:
+    if item_id in seen_ids or fingerprint in seen_content:
       continue
-    seen.add(fingerprint)
+    seen_ids.add(item_id)
+    seen_content.add(fingerprint)
     output.append(item)
   return output
 
