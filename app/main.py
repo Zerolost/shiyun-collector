@@ -114,6 +114,7 @@ async def current_manifest() -> dict[str, Any]:
 
 
 @app.get("/health")
+@app.get("/api/health")
 async def health() -> dict[str, str]:
   return {"status": "ok"}
 
