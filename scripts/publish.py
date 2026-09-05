@@ -56,12 +56,41 @@ def merge_vocabulary(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
   return non_vocabulary + merged
 
 
+def derive_cross_module_content(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
+  derived: list[dict[str, Any]] = []
+  for item in items:
+    if item.get("subject") == "chinese" and item.get("module") == "essay_material":
+      source_id: str = str(item.get("id", ""))
+      derived.append({
+        "id": f"chinese-reading:{hashlib.sha256(source_id.encode()).hexdigest()[:20]}",
+        "subject": "chinese",
+        "module": "chinese_reading",
+        "title": f"{item.get('title', '现代文')}阅读训练",
+        "text": item.get("text", ""),
+        "sourceId": item.get("sourceId", ""),
+        "sourceUrl": item.get("sourceUrl", ""),
+        "license": item.get("license", ""),
+        "tags": list(dict.fromkeys(item.get("tags", []) + ["阅读理解", "信息提取"])),
+        "metadata": {
+          "questions": ["概括文本主要内容", "结合文本分析表达效果"],
+          "answerGuide": "依据文本事实组织答案，结合关键词分点作答",
+          "originContentId": source_id,
+          "reviewStatus": "auto-derived"
+        }
+      })
+  return items + derived
+
+
 def main() -> None:
   target = Path(os.environ["DATA_REPO_DIR"])
   items: list[dict[str, Any]] = json.loads((DATA / "normalized.json").read_text("utf-8"))
   report: dict[str, Any] = json.loads((DATA / "report.json").read_text("utf-8"))
-  items = merge_vocabulary(items)
   normalized = target / "normalized"
+  existing_essay_path: Path = normalized / "chinese" / "essay_material.json"
+  if existing_essay_path.exists():
+    existing_essay: list[dict[str, Any]] = json.loads(existing_essay_path.read_text("utf-8"))
+    items.extend(existing_essay)
+  items = derive_cross_module_content(merge_vocabulary(items))
   normalized.mkdir(parents=True, exist_ok=True)
   groups: dict[str, list[dict[str, Any]]] = {}
   for item in items:
