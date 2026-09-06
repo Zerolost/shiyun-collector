@@ -1,15 +1,12 @@
 from typing import Any
 
-try:
-  from opencc import OpenCC
-except ImportError:
-  OpenCC = None
+from opencc import OpenCC
+
+_SIMPLIFIER = OpenCC("t2s")
 
 
 def to_simplified(value: str) -> str:
-  if OpenCC is None:
-    return value
-  return OpenCC("t2s").convert(value)
+  return _SIMPLIFIER.convert(value)
 
 
 def normalize_item(item: dict[str, Any]) -> dict[str, Any]:

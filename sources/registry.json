@@ -12,17 +12,6 @@
     "tags": ["名言", "语录"]
   },
   {
-    "id": "zh-wikipedia-current",
-    "subject": "chinese",
-    "module": "essay_material",
-    "adapter": "mediawiki",
-    "frequency": "frequent",
-    "url": "https://zh.wikipedia.org/w/api.php?action=query&generator=recentchanges&grclimit=30&grcnamespace=0&prop=extracts|info&explaintext=1&exintro=1&format=json",
-    "homepage": "https://zh.wikipedia.org/",
-    "license": "CC BY-SA",
-    "tags": ["现代文", "百科", "作文素材"]
-  },
-  {
     "id": "zh-wikisource",
     "subject": "chinese",
     "module": "classical_text",

@@ -1,5 +1,6 @@
 import csv
 import io
+import re
 from typing import Any
 
 from models import NormalizedItem
@@ -13,6 +14,7 @@ def parse(payload: bytes, source: dict[str, Any]) -> list[NormalizedItem]:
   for row in reader:
     word: str = str(row.get("word", "")).strip()
     translation: str = str(row.get("translation", "")).strip()
+    translation = translation.replace("\r", " ").replace("\n", " ")
     if not word or not translation or len(word) > 40:
       continue
     items.append({

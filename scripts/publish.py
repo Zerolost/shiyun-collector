@@ -6,6 +6,8 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from crawler.quality import filter_quality
+
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / ".data"
 
@@ -50,7 +52,7 @@ def merge_vocabulary(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
     preferred["metadata"] = metadata
     preferred["text"] = str(metadata.get("englishDefinitions") and "; ".join(metadata["englishDefinitions"]) or metadata.get("chineseMeaning", ""))
     preferred["translation"] = str(metadata.get("chineseMeaning", ""))
-    preferred["metadata"] = {**metadata, "learningStage": "high-school-core"}
+    preferred["metadata"] = {**metadata, "learningStage": "high-school-general"}
     merged.append(preferred)
   non_vocabulary: list[dict[str, Any]] = [item for item in items if not (item.get("subject") == "english" and item.get("module") == "vocabulary")]
   return non_vocabulary + merged
@@ -90,7 +92,9 @@ def main() -> None:
   if existing_essay_path.exists():
     existing_essay: list[dict[str, Any]] = json.loads(existing_essay_path.read_text("utf-8"))
     items.extend(existing_essay)
+  items = filter_quality(items)
   items = derive_cross_module_content(merge_vocabulary(items))
+  items = filter_quality(items)
   normalized.mkdir(parents=True, exist_ok=True)
   groups: dict[str, list[dict[str, Any]]] = {}
   for item in items:
