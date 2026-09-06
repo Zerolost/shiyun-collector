@@ -102,16 +102,21 @@ def main() -> None:
   for item in items:
     key: str = f"{item['subject']}/{item['module']}"
     groups.setdefault(key, []).append(item)
-  for key, values in groups.items():
+  existing_groups: dict[str, list[dict[str, Any]]] = {}
+  for path in sorted(normalized.rglob("*.json")):
+    try:
+      values: list[dict[str, Any]] = json.loads(path.read_text("utf-8"))
+    except (json.JSONDecodeError, OSError):
+      continue
+    key: str = str(path.relative_to(normalized).with_suffix(""))
+    existing_groups[key] = filter_quality(values)
+  all_keys: set[str] = set(groups) | set(existing_groups)
+  for key in sorted(all_keys):
     path: Path = normalized / f"{key}.json"
     path.parent.mkdir(parents=True, exist_ok=True)
-    previous: list[dict[str, Any]] = []
+    values: list[dict[str, Any]] = groups.get(key, [])
+    previous: list[dict[str, Any]] = existing_groups.get(key, [])
     replace_vocabulary: bool = key == "english/vocabulary" and report["profile"] == "weekly"
-    if path.exists() and not replace_vocabulary:
-      try:
-        previous = json.loads(path.read_text("utf-8"))
-      except (json.JSONDecodeError, OSError):
-        previous = []
     if key == "english/vocabulary" and report["profile"] == "weekly":
       sentence_paths: list[Path] = [normalized / "english" / "sentence_corpus.json", normalized / "english" / "bilingual_sentence.json"]
       sentences: list[dict[str, Any]] = []

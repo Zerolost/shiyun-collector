@@ -17,7 +17,6 @@ TRADITIONAL_VARIANTS: dict[str, str] = {
   "經": "经",
   "劔": "剑",
   "閟": "闺",
-  "宫": "宫",
 }
 
 
@@ -28,6 +27,8 @@ def is_usable_vocabulary_title(value: str) -> bool:
   if not ENGLISH_WORD.fullmatch(word):
     return False
   if word.startswith(("-", "'")) or word.endswith(("-", "'")):
+    return False
+  if word.startswith(("-able", "'s ", "'t")):
     return False
   return True
 
