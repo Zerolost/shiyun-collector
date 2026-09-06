@@ -6,9 +6,11 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from crawler.quality import filter_quality
-
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in os.sys.path:
+  os.sys.path.insert(0, str(ROOT))
+
+from crawler.quality import filter_quality
 DATA = ROOT / ".data"
 
 
